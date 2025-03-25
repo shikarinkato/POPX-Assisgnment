@@ -1,29 +1,61 @@
-import { useState } from "react";
+import { Children, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-  const [isYes, setIsYes] = useState(true);
+  const [formData, setFormData] = useState({
+    fullName: "John Doe",
+    phoneNumber: "673749",
+    email: "johndoe@mail.com",
+    pass: "****",
+    comName: "Doe EnterPrises",
+    isAgency: true,
+  });
   let navigate = useNavigate();
 
   function handleForm(e) {
     e.stopPropagation();
     e.preventDefault();
-    navigate("/home");
+    navigate("/home", {
+      state: { fullName: formData.fullName, email: formData.email },
+    });
   }
 
   function handleRadioBtn(e) {
     e.stopPropagation();
     if (e.target.id === "yes") {
-      setIsYes(true);
+      setFormData((prev) => ({ ...prev, isAgency: true }));
       //   e.target.nextElementSibling.children[0].children[0].style.background =
       //     "#3A47CC";
       //   e.target.nextElementSibling.style.background = "#3A47CC";
     } else if (e.target.id === "no") {
-      setIsYes(false);
+      setFormData((prev) => ({ ...prev, isAgency: false }));
 
       //   e.target.nextElementSibling.children[0].children[0].style.background =
       //     "#3A47CC";
       //   e.target.nextElementSibling.style.background = "#3A47CC";
+    }
+  }
+
+  function handleChange(e) {
+    const id = e.target.id;
+    switch (id) {
+      case "fullName":
+        setFormData((prev) => ({ ...prev, fullName: e.target.value }));
+        break;
+      case "phone_number":
+        setFormData((prev) => ({ ...prev, phoneNumber: e.target.value }));
+        break;
+      case "email":
+        setFormData((prev) => ({ ...prev, email: e.target.value }));
+        break;
+      case "pass":
+        setFormData((prev) => ({ ...prev, pass: e.target.value }));
+        break;
+      case "com_name":
+        setFormData((prev) => ({ ...prev, comName: e.target.value }));
+        break;
+      default:
+        console.log("You Choose Wrong Field To edit");
     }
   }
 
@@ -46,8 +78,10 @@ const SignUp = () => {
                 Fullname
               </label>
               <input
-                id="text"
-                type="fullname"
+                value={formData.fullName}
+                onChange={handleChange}
+                id="fullName"
+                type="text"
                 placeholder="Enter Fullname"
                 className="border-[2px] border-[#DDDEDE] rounded-sm pl-1 py-1 outline-none w-full placeholder:text-[12px] placeholder:font-semibold"
               />
@@ -60,6 +94,8 @@ const SignUp = () => {
                 Phone Number
               </label>
               <input
+                value={formData.phoneNumber}
+                onChange={handleChange}
                 id="phone_number"
                 type="text"
                 placeholder="Enter Phone Number"
@@ -74,6 +110,8 @@ const SignUp = () => {
                 Email Address
               </label>
               <input
+                value={formData.email}
+                onChange={handleChange}
                 id="email"
                 type="email"
                 placeholder="Enter Email Address"
@@ -88,6 +126,8 @@ const SignUp = () => {
                 Password
               </label>
               <input
+                value={formData.pass}
+                onChange={handleChange}
                 id="pass"
                 type="password"
                 placeholder="Enter Password"
@@ -102,6 +142,8 @@ const SignUp = () => {
                 Company Name
               </label>
               <input
+                value={formData.comName}
+                onChange={handleChange}
                 id="com_name"
                 type="text"
                 placeholder="Enter Your Company Name"
@@ -120,13 +162,13 @@ const SignUp = () => {
                 />
                 <div
                   className={`flex justify-center items-center rounded-full ${
-                    isYes ? "bg-blue-700" : "bg-gray-700"
+                    formData.isAgency ? "bg-blue-700" : "bg-gray-700"
                   }  bg-gray-700 h-4 w-4`}
                 >
                   <div className="flex justify-center items-center rounded-full bg-[#F7F8F9] h-3.5 w-3.5">
                     <span
                       className={`block rounded-full ${
-                        isYes ? "bg-blue-700" : "bg-transparent"
+                        formData.isAgency ? "bg-blue-700" : "bg-transparent"
                       } h-2 w-2`}
                     ></span>
                   </div>
@@ -142,13 +184,13 @@ const SignUp = () => {
                 />
                 <div
                   className={`flex justify-center items-center rounded-full ${
-                    isYes ? "bg-gray-700" : "bg-blue-700"
+                    formData.isAgency ? "bg-gray-700" : "bg-blue-700"
                   }  bg-gray-700 h-4 w-4`}
                 >
                   <div className="flex justify-center items-center rounded-full bg-[#F7F8F9] h-3.5 w-3.5">
                     <span
                       className={`block rounded-full ${
-                        isYes ? "bg-transparent" : "bg-blue-700"
+                        formData.isAgency ? "bg-transparent" : "bg-blue-700"
                       } h-2 w-2`}
                     ></span>
                   </div>

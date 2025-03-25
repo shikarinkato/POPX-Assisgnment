@@ -1,11 +1,34 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const LogIn = () => {
+  const [formData, setFormData] = useState({
+    email: "johndoe@mail.com",
+    pass: "****",
+  });
+
   let navigate = useNavigate();
   function handleForm(e) {
     e.stopPropagation();
     e.preventDefault();
-    navigate("/home");
+    navigate("/home", {
+      state: { fullName: "John Doe", email: formData.email },
+    });
+  }
+
+  function handleChange(e) {
+    const id = e.target.id;
+    switch (id) {
+      case "email":
+        setFormData((prev) => ({ ...prev, email: e.target.value }));
+        break;
+      case "pass":
+        setFormData((prev) => ({ ...prev, pass: e.target.value }));
+        break;
+
+      default:
+        console.log("You Choose Wrong Field To edit");
+    }
   }
 
   return (
@@ -31,6 +54,8 @@ const LogIn = () => {
                 Email Address
               </label>
               <input
+                value={formData.email}
+                onChange={handleChange}
                 id="email"
                 type="email"
                 placeholder="Enter Email Address"
@@ -45,6 +70,8 @@ const LogIn = () => {
                 Password
               </label>
               <input
+                value={formData.pass}
+                onChange={handleChange}
                 id="pass"
                 type="password"
                 placeholder="Enter Password"
@@ -54,7 +81,9 @@ const LogIn = () => {
           </div>
           <button
             id="login"
-            className=" py-2 w-full text-center bg-[#CBCBCB] rounded-sm text-white text-[14px] font-semibold cursor-pointer "
+            className={` py-2 w-full text-center ${
+              formData.pass.length >= 3 ? "bg-blue-700" : "bg-[#CBCBCB]"
+            } rounded-sm text-white text-[14px] font-semibold cursor-pointer `}
           >
             Login
           </button>

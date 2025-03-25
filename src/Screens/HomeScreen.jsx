@@ -1,6 +1,19 @@
 import React from "react";
 import Camera from "../assests/icons8-camera-96.png";
+import { useLocation } from "react-router-dom";
 function HomeScreen() {
+  const location = useLocation();
+  let state = location.state;
+  const handleFile = (e) => {
+    // console.log(e.target.files);
+    let fileReader = new FileReader();
+    fileReader.readAsDataURL(e.target.files[0]);
+    let img = document.getElementById("user-image");
+    fileReader.onload = () => {
+      img.src = `${fileReader.result}`;
+    };
+  };
+
   return (
     <div className=" flex flex-col h-screen w-full">
       <div className="bg-white text-black w-full p-4">
@@ -14,13 +27,20 @@ function HomeScreen() {
                 <img
                   src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
                   alt="user-image"
+                  id="user-image"
+                  loading="lazy"
                   className=" object-center object-cover"
                 />
               </div>
-              <input type="file" className=" hidden" id="dp" />
+              <input
+                onChange={handleFile}
+                type="file"
+                className=" hidden"
+                id="dp"
+              />
               <label
                 htmlFor="dp"
-                className="inline-block rounded-full bg-purple-700 p-[0.3rem] absolute bottom-0  right-0"
+                className="inline-block rounded-full bg-purple-700 p-[0.3rem] absolute bottom-0  right-0 cursor-pointer"
               >
                 <img
                   src={Camera}
@@ -30,8 +50,12 @@ function HomeScreen() {
               </label>
             </div>
             <div className=" flex flex-col pl-2">
-              <span className="text-[15px] font-semibold">John doe</span>
-              <span className="text-[15px] font-semibold text-gray-700">johndoe@mail.com</span>
+              <span className="text-[15px] font-semibold">
+                {state.fullName || "John Doe"}
+              </span>
+              <span className="text-[15px] font-semibold text-gray-700">
+                {state.email}
+              </span>
             </div>
           </div>
           <p className="p-2">
